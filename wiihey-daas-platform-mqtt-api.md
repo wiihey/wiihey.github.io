@@ -54,7 +54,8 @@ Message looks like:
    "APP-ID": "xxxxxxxx",
    "DeviceID": "xxxxxxxx",
    "Timestamp": "xxxxxxxxxxx",
-   "State": "Device State":
+   "State": "xxxx",
+   "BatteryLevel":xxxx,
    "IMEI": "xxxxxxxx",
    "CCID": "xxxxxxxx",
    "CSQ": 32,
@@ -79,6 +80,10 @@ This is the [Unix time](https://en.wikipedia.org/wiki/Unix_time) when the messag
 
 Device's State. For Manhole Sensor the states are 'open' and 'close'.
 
+### BatteryLevel
+
+Indicates the remaining battery as a value between 0 and 10000.
+
 ### IMEI
 
 IMEI is a string that identifies the Modem module in the Device.
@@ -101,6 +106,7 @@ CSQ is a number that describes the signal strength.
    "DeviceID": "5da6f03c",
    "Timestamp": "1529553530",
    "State": "open",
+   "BatteryLevel":9600,
    "IMEI": "351756051523999",
    "ICCID": "89014103243534707921",
    "CSQ": 30
