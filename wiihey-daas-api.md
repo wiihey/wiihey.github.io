@@ -1,57 +1,113 @@
-# MQTT API
+# WiiHey DaaS Platform MQTT API
 
-## Overview
+## Getting Started
 
-WiiHey Cloud forwards device's messages to Customer's Application via MQTTS (aka. MQTT over SSL).
+### MQTT Basics
 
-## Connection Settings
+[MQTT](https://en.wikipedia.org/wiki/MQTT) is a lightweight publish-subscribe messaging protocol which is probably the most suitable protocol for various IoT use cases. WiiHey DaaS Platform acts as an MQTT Broker over SSL/TLS with predefined topics.
 
-> port: 8883
-> host: 'iot.wiihey.com'
-> username: {CustomerID}
-> password: {CustomerKey}
-> protocol: "mqtts"
+### Client Setup
 
-The CustomerID and CustomerKey is provided by WiiHey.
+You can find a large number of MQTT client libraries on the web. The [Sample Project](https://github.com/wiihey/nodejs-mqtt-client-demo) we provided is based on NodeJS and MQTT.js. In order to setup them, follow instructions in the project README.
 
-## Evaluation Account
+## Getting Connected
 
-A pair of special ID&Key are provided for evaluation purpose:
+We are using MQTT over SSL/TLS for security concerns, so make sure they are enabled in your MQTT Client. Follow the [Sample Project](https://github.com/wiihey/nodejs-mqtt-client-demo) if your Application Server are based on NodeJS.
 
-> CustomerID: eval_id
-> CustomerKey: eval_key
+```
+port: 8883
+host: 'iot.wiihey.com'
+username: {APP-ID}
+password: {APP-KEY}
+protocol: "mqtts"
+```
 
-## Topics
+## Authentication
 
-### Inbox iot/{CustomerID}/inbox
+We use APP-ID and APP-KEY to identify and authenticate your Application Server. WiiHey Customer Support Team will provide to you these credentials.
 
-Application subscribes the inbox topic to receive messages from WiiHey Cloud. The Cloud Server will route relevant device's messages to the customer inbox based on routing rules, which are configured before WiiHey ships devices out.
+## Key Value Format
 
-The message's format is:
+All messages are Key-Value content in JSON. Key is always string while Value can be string, boolean and number.
 
-> {
->   "CustomerID": "xxxxxxxx",
->   "DeviceID": "xxxxxxxx",
->   "Timestamp": "xxxxxxxxxxx", // epoch time in seconds
->   "State": "{open/close/offline}: // The Device's current state. can be "open", "close" or "offline".
->   "IMEI": "xxxxxxxx", // the IMEI string
->   "CCID": "xxxxxxxx", // the CCID string
->   "CSQ": "32", // The Signal Quality
-> }
+For example:
+```
+{
+  "key-1": "a string value",
+  "key-2": 123,
+  "key-3": true
+}
+```
 
-The Cloud sends state == open/close message when someone opens/closes the Manhole Cover. It sends the state == offline message when the Manhole Cover stops sending Keep-Alive token for a long period.
+### Incoming Message API
+
+To receive message from WiiHey DaaS Platform, Subscribe to the following topic:
+
+```
+iot/{APP-ID}/inbox
+```
+
+Message looks like:
+
+```
+{
+   "APP-ID": "xxxxxxxx",
+   "DeviceID": "xxxxxxxx",
+   "Timestamp": "xxxxxxxxxxx",
+   "State": "Device State":
+   "IMEI": "xxxxxxxx",
+   "CCID": "xxxxxxxx",
+   "CSQ": 32,
+ }
+```
+
+## Keys
+
+### APP-ID
+
+Application Server's ID
+
+### DeviceID
+
+Device's ID. 
+
+### Timestamp
+
+[Unix time](https://en.wikipedia.org/wiki/Unix_time) when the message is arrived at WiiHey DaaS Platform.
+
+### State
+
+Device's State. For Manhole Sensor the states are 'open' and 'close'.
+
+### IMEI
+
+IMEI is a string that identifies the Modem module in the Device.
+
+### ICCID
+
+ICCID is a string that identifies the SIM card.
+
+### CSQ
+
+CSQ is a number that describes the signal strength.
+
+
+
+## 
 
 ### Examples
 
 #### Manhole cover open
 
-> {
->   "CustomerID": "a6157a33",
->   "DeviceID": "5da6f03c",
->   "Timestamp": "1529553530",
->   "State": "open",
->   "IMEI": "351756051523999",
->   "CCID": "89014103243534707921",
->   "CSQ": "30"
-> }
+```
+{
+   "CustomerID": "a6157a33",
+   "DeviceID": "5da6f03c",
+   "Timestamp": "1529553530",
+   "State": "open",
+   "IMEI": "351756051523999",
+   "ICCID": "89014103243534707921",
+   "CSQ": 30
+}
+```
 
