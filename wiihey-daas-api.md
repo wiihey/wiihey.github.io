@@ -73,7 +73,7 @@ Device's ID.
 
 ### Timestamp
 
-[Unix time](https://en.wikipedia.org/wiki/Unix_time) when the message is arrived at WiiHey DaaS Platform.
+This is the [Unix time](https://en.wikipedia.org/wiki/Unix_time) when the message is arrived at WiiHey DaaS Platform.
 
 ### State
 
@@ -90,10 +90,6 @@ ICCID is a string that identifies the SIM card.
 ### CSQ
 
 CSQ is a number that describes the signal strength.
-
-
-
-## 
 
 ### Examples
 
